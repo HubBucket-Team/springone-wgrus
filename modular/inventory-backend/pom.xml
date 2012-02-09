@@ -8,8 +8,8 @@
 		<version>1.0.0-BUILD-SNAPSHOT</version>
 	</parent>
 	<groupId>org.springsource.samples.wgrus</groupId>
-	<artifactId>wgrus-modular-store</artifactId>
-	<packaging>war</packaging>
+	<artifactId>wgrus-modular-inventory-backend</artifactId>
+	<packaging>jar</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.6</java-version>
@@ -20,11 +20,6 @@
 		<org.springframework.integration-version>2.1.0.M3</org.springframework.integration-version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springsource.samples.wgrus</groupId>
-			<artifactId>wgrus-modular-store-backend</artifactId>
-			<version>1.0.0-BUILD-SNAPSHOT</version>
-		</dependency>
 		<!-- CloudFoundry -->
 		<dependency>
 			<groupId>org.cloudfoundry</groupId>
@@ -36,6 +31,11 @@
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-amqp</artifactId>
+			<version>${org.springframework.integration-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-http</artifactId>
 			<version>${org.springframework.integration-version}</version>
 		</dependency>
 		<dependency>
@@ -264,7 +264,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<warName>wgrus-modular-store</warName>
+					<warName>wgrus-modular-inventory</warName>
 				</configuration>
 			</plugin>
 			<plugin>

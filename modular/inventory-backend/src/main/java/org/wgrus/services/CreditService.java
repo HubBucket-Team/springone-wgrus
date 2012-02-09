@@ -10,8 +10,11 @@ public class CreditService {
 	public String check(String customerId) {
 		RestTemplate t = new RestTemplate();
 		HttpEntity<String> requestEntity = new HttpEntity<String>("");
-		ResponseEntity<String> r = t.exchange("http://wgrus-billing.cloudfoundry.com/authorize/" + customerId,
+		System.out.println("Doing HTTP request");
+		ResponseEntity<String> r = t.exchange("http://cer-billing.chrisr.cloudfoundry.me/authorize/" + customerId,
 				HttpMethod.GET, requestEntity, String.class);
-		return r.getBody();
+		String body = r.getBody();
+		System.out.println("Body=" + body);
+    return body;
 	}
 }

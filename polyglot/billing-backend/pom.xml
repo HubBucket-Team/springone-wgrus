@@ -2,14 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<artifactId>wgrus-modular-parent</artifactId>
-		<groupId>org.springsource.samples.wgrus</groupId>
-		<version>1.0.0-BUILD-SNAPSHOT</version>
-	</parent>
 	<groupId>org.springsource.samples.wgrus</groupId>
-	<artifactId>wgrus-modular-store</artifactId>
-	<packaging>war</packaging>
+	<artifactId>wgrus-billing-backend</artifactId>
+	<packaging>jar</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.6</java-version>
@@ -17,19 +12,23 @@
 		<org.springframework-version>3.1.0.M2</org.springframework-version>
 		<org.aspectj-version>1.6.11</org.aspectj-version>
 		<org.slf4j-version>1.5.10</org.slf4j-version>
-		<org.springframework.integration-version>2.1.0.M3</org.springframework.integration-version>
+		<org.springframework.integration-version>2.1.0.M2</org.springframework.integration-version>
+		<org.springframework.amqp-version>1.0.0.RELEASE</org.springframework.amqp-version>
+		<org.springframework.data.mongodb-version>1.0.0.RELEASE</org.springframework.data.mongodb-version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springsource.samples.wgrus</groupId>
-			<artifactId>wgrus-modular-store-backend</artifactId>
-			<version>1.0.0-BUILD-SNAPSHOT</version>
-		</dependency>
 		<!-- CloudFoundry -->
 		<dependency>
 			<groupId>org.cloudfoundry</groupId>
 			<artifactId>cloudfoundry-runtime</artifactId>
 			<version>${org.cloudfoundry-version}</version>
+		</dependency>
+		
+		<!-- Charts -->
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.13</version>
 		</dependency>
 
 		<!-- Spring -->
@@ -45,19 +44,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-redis</artifactId>
-			<version>${org.springframework.integration-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-jdbc</artifactId>
 			<version>${org.springframework.integration-version}</version>
 		</dependency>
-		<dependency>
-      		<groupId>org.codehaus.jackson</groupId>
-      		<artifactId>jackson-core-asl</artifactId>
-      		<version>1.4.3</version>
-	    </dependency>
 		<dependency>
       		<groupId>org.codehaus.jackson</groupId>
       		<artifactId>jackson-mapper-asl</artifactId>
@@ -190,17 +179,15 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.0.5</version>
+			<version>5.1.17</version>
 		</dependency>
 
 		<!-- RabbitMQ/AMQP -->
-		<!--
 		<dependency>
   			<groupId>org.springframework.amqp</groupId>
   			<artifactId>spring-rabbit</artifactId>
   			<version>${org.springframework.amqp-version}</version>
 		</dependency>
-		-->
 		<!--
 		<dependency>
 			<groupId>org.springframework.data</groupId>
@@ -208,13 +195,11 @@
 			<version>${org.springframework.data.redis-version}</version>
 		</dependency>
 		-->
-		<!--
 		<dependency>
 		  <groupId>org.springframework.data</groupId>
 		  <artifactId>spring-data-mongodb</artifactId>
 		  <version>${org.springframework.data.mongodb-version}</version>
 		</dependency> 
-		-->
 
 		<!-- Database -->
 		<dependency>
@@ -264,7 +249,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<warName>wgrus-modular-store</warName>
+					<warName>wgrus-monolithic</warName>
 				</configuration>
 			</plugin>
 			<plugin>

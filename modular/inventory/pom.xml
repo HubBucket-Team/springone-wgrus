@@ -2,6 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>wgrus-modular-parent</artifactId>
+		<groupId>org.springsource.samples.wgrus</groupId>
+		<version>1.0.0-BUILD-SNAPSHOT</version>
+	</parent>
 	<groupId>org.springsource.samples.wgrus</groupId>
 	<artifactId>wgrus-modular-inventory</artifactId>
 	<packaging>war</packaging>
@@ -15,6 +20,11 @@
 		<org.springframework.integration-version>2.1.0.M3</org.springframework.integration-version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.springsource.samples.wgrus</groupId>
+			<artifactId>wgrus-modular-inventory-backend</artifactId>
+			<version>1.0.0-BUILD-SNAPSHOT</version>
+		</dependency>
 		<!-- CloudFoundry -->
 		<dependency>
 			<groupId>org.cloudfoundry</groupId>

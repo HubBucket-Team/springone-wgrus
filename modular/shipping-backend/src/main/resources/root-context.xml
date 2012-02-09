@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:amqp="http://www.springframework.org/schema/integration/amqp"
+	xmlns:rest="http://www.springframework.org/schema/integration/http"
 	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xmlns:redis="http://www.springframework.org/schema/data/redis"
@@ -11,8 +12,9 @@
 	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:cloud="http://schema.cloudfoundry.org/spring"
 	xsi:schemaLocation="http://schema.cloudfoundry.org/spring http://schema.cloudfoundry.org/spring/cloudfoundry-spring-0.8.xsd
-		http://www.springframework.org/schema/integration/amqp http://www.springframework.org/schema/integration/amqp/spring-integration-amqp-2.1.xsd
-		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
+		http://www.springframework.org/schema/integration/amqp http://www.springframework.org/schema/integration/amqp/spring-integration-amqp.xsd
+		http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd
 		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
 		http://www.springframework.org/schema/data/redis http://www.springframework.org/schema/data/redis/spring-redis-1.0.xsd
@@ -21,21 +23,26 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<int:object-to-json-transformer input-channel="orderChannel" output-channel="jsonOrders"/>
+	<import resource="shipping-logical-context.xml"/>
 
-	<int:claim-check-in input-channel="jsonOrders" output-channel="amqpOut"/>
+	<amqp:inbound-channel-adapter channel="shippingOrderChannel"
+		connection-factory="rabbitConnectionFactory"
+		queue-names="inventory"
+		error-channel="errorLogger"/>
 
-	<amqp:outbound-channel-adapter id="amqpOut" amqp-template="rabbitTemplate" routing-key="orders"/>
+	<int:claim-check-out id="shippingCco" input-channel="shippingOrderChannel" output-channel="shippingJsonOrders" remove-message="true"/>
+
+	<int:logging-channel-adapter id="errorLogger" log-full-message="true" level="DEBUG"/>
+
+	<int:json-to-object-transformer type="org.wgrus.Order" input-channel="shippingJsonOrders" output-channel="inputForShippingChain"/>
 
 	<bean id="messageStore" class="org.springframework.integration.mongodb.store.MongoDbMessageStore">
 		<constructor-arg ref="mongoDbFactory"/>
 	</bean>
 
-	<rabbit:queue name="orders"/>
+	<rabbit:queue name="inventory"/>
 
-	<rabbit:admin connection-factory="rabbitConnectionFactory"/>
-
-	<rabbit:template id="rabbitTemplate" connection-factory="rabbitConnectionFactory"/>
+	<rabbit:admin id="rabbitAdmin" connection-factory="rabbitConnectionFactory"/>
 
 	<beans profile="default">
 		<mongo:db-factory id="mongoDbFactory"/>
